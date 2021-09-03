@@ -5,3 +5,4 @@ The NEC protocol is just 4 byte of data which two of them are bit inverse of eac
 The first byte is the device address and the second is bit inverse of the device address and the third is the key address which is pressed and the last byte is bit inverse of that key address.
 We measure the time between each two falling edge of PC1 GPIO to figure whats going on.
 For more information about NEC protocol follow the link bellow:
+https://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol

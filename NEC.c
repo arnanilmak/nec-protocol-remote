@@ -12,49 +12,50 @@ void interrupt ISR(void)
 {
     static char ir_frame_start_flag=0,cnt1=0,cnt2=0,buf[4];
     
-    if(INTF)
+if(INTF)
+{
+	TMR1ON=1;
+	if(time<2300)
 	{
-    TMR1ON=1;
-		if(time<2300)
+		if(ir_frame_start_flag)
 		{
-       if(ir_frame_start_flag)
-       {
-				if(time<1250)//0 state
-				{
-					buf[cnt1]&=~(1<<(cnt2%8));
-				}
-				else   //1 state
-				{
-					buf[cnt1]|=1<<(cnt2%8);
-				}
-				cnt2++;
-				if(cnt2==32)
-                {               
-                    ir_frame_start_flag=0;
-                    TMR1ON=0;
-                    if((buf[0]|buf[1])==0xFF)
-                    {
-                        ir_data=buf[2];
-					}
-                 }
-				else if((cnt2%8)==0){cnt1++;}
-            }
+			if(time<1250)//0 state
+			{
+				buf[cnt1]&=~(1<<(cnt2%8));
+			}
+			else   //1 state
+			{
+				buf[cnt1]|=1<<(cnt2%8);
+			}
+			cnt2++;
+			if(cnt2==32)
+			{               
+			     ir_frame_start_flag=0;
+			     TMR1ON=0;
+			     if((buf[0]|buf[1])==0xFF)
+			     {
+				ir_data=buf[2];
+			     }
+			}
+		 else if((cnt2%8)==0){cnt1++;}
 		}
-		else if(time<11500)//repeat
-		{
-            TMR1ON=0;
-		}
-		else if(time<14000)//start
-		{
-            ir_data_cnt=0;
-			ir_frame_start_flag=1;
-			cnt1=0;
-            cnt2=0;
-		}
-		INTF = 0;
-		TMR1H=0;
-        TMR1L=0;
 	}
+	else if(time<11500)//repeat
+	{
+		 TMR1ON=0;
+	}
+	else if(time<14000)//start
+	{
+		ir_data_cnt=0;
+		ir_frame_start_flag=1;
+		cnt1=0;
+		cnt2=0;
+	}
+
+	INTF = 0;
+	TMR1H=0;
+	TMR1L=0;
+}
    
 }
 
